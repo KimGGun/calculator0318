@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script
+            src="http://code.jquery.com/jquery-3.3.1.js"
+            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+            crossorigin="anonymous"></script>
+</head>
+<body>
+    <section>
+        <h1>사칙연산</h1>
+        <div>
+            <input type="number" id="one" placeholder="숫자 입력">
+            <input type="number" id="two" placeholder="숫자 입력">
+            <select id="oper">
+                <option value="1">+</option>
+                <option value="2">-</option>
+                <option value="3">*</option>
+                <option value="4">/</option>
+            </select>
+            <button onclick="calcul()">전송</button>
+            <div id="display-result">결과</div>
+            <script>
+                function calcul() {
+                    let one = $('#one').val().trim();
+                    let two = $('#two').val().trim();
+                    let oper = $('#oper').val()
+
+                    if(! one || one === " "){
+                        if(! two || two === " "){
+                            if(! oper || oper === " "){
+                                $('#display-result').html("모든 칸을 입력하시오");
+                                return;
+                            }
+                        }
+                    }
+
+                    $.get("/cal/"+one+"/"+two+"/"+oper)
+                        .done((response) => {
+                            $('#display-result').html(JSON.stringify(response));})
+                        .fail((error) => {
+                            $('#display-result').html(JSON.stringify(error));})
+                        .always(() => {
+                            $('#display-result').html("결과 : "+ $('#display-result').html());
+                        });
+                }
+            </script>
+        </div>
+    </section>
+</body>
+</html>
